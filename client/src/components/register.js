@@ -77,9 +77,7 @@ function Register() {
                 <input type="email" name="email" placeholder="Email" style={styles.inputField} value={formData.email} onChange={handleChange} required />
                 <input type="password" name="password" placeholder="Password" style={styles.inputField} value={formData.password} onChange={handleChange} required />
                 <select name="role" style={styles.inputField} value={formData.role} onChange={handleChange}>
-                    {/* <option value="default" > - - -Select option- - - </option> */}
                     <option value="student">Student</option>
-                    {/* Admin registration should ideally be handled separately */}
                 </select>
                 <button type="submit" style={styles.submitButton}>Register</button>
             </form>

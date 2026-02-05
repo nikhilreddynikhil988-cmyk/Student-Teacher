@@ -62,8 +62,6 @@ function AdminDashboard() {
                 },
                 { headers: { 'x-auth-token': token } }
             );
-
-            // Then create the teacher profile
             const API_URL_2 = process.env.REACT_APP_API_URL || 'http://localhost:5001';
             await axios.post(
                 `${API_URL_2}/api/teachers`,
