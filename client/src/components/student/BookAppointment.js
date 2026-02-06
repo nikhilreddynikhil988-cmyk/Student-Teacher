@@ -14,19 +14,18 @@ function BookAppointment() {
     });
 
     useEffect(() => {
+        const fetchTeacher = async () => {
+            try {
+                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+                const res = await axios.get(`${API_URL}/api/teachers/${teacherId}`);
+                setTeacher(res.data);
+                setFormData(prevFormData => ({ ...prevFormData, subject: res.data.subject }));
+            } catch (error) {
+                console.error('Error fetching teacher:', error);
+            }
+        };
         fetchTeacher();
     }, [teacherId]);
-
-    const fetchTeacher = async () => {
-        try {
-            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
-            const res = await axios.get(`${API_URL}/api/teachers/${teacherId}`);
-            setTeacher(res.data);
-            setFormData({ ...formData, subject: res.data.subject });
-        } catch (error) {
-            console.error('Error fetching teacher:', error);
-        }
-    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
