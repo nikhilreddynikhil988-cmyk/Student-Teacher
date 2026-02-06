@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 function AdminDashboard() {
     const [teachers, setTeachers] = useState([]);
-    const [users, setUsers] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -15,11 +13,9 @@ function AdminDashboard() {
         experience: '',
         bio: ''
     });
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetchTeachers();
-        fetchUsers();
     }, []);
 
     const fetchTeachers = async () => {
@@ -32,16 +28,6 @@ function AdminDashboard() {
         }
     };
 
-    const fetchUsers = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            // This would need a users endpoint, for now we'll skip
-            setUsers([]);
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
-    };
-
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -51,7 +37,8 @@ function AdminDashboard() {
         try {
             const token = localStorage.getItem('token');
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
-            // First create the user
+
+            // Create user
             const userResponse = await axios.post(
                 `${API_URL}/api/admin/users`,
                 {
@@ -62,9 +49,10 @@ function AdminDashboard() {
                 },
                 { headers: { 'x-auth-token': token } }
             );
-            const API_URL_2 = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+
+            // Create teacher profile
             await axios.post(
-                `${API_URL_2}/api/teachers`,
+                `${API_URL}/api/teachers`,
                 {
                     userId: userResponse.data.user.id,
                     subject: formData.subject,
@@ -77,7 +65,15 @@ function AdminDashboard() {
 
             alert('Teacher added successfully!');
             setShowAddForm(false);
-            setFormData({ name: '', email: '', password: '', subject: '', qualification: '', experience: '', bio: '' });
+            setFormData({
+                name: '',
+                email: '',
+                password: '',
+                subject: '',
+                qualification: '',
+                experience: '',
+                bio: ''
+            });
             fetchTeachers();
         } catch (error) {
             console.error('Error adding teacher:', error);
@@ -91,9 +87,11 @@ function AdminDashboard() {
         try {
             const token = localStorage.getItem('token');
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+
             await axios.delete(`${API_URL}/api/teachers/${teacherId}`, {
                 headers: { 'x-auth-token': token }
             });
+
             alert('Teacher deleted successfully');
             fetchTeachers();
         } catch (error) {
@@ -106,14 +104,16 @@ function AdminDashboard() {
         try {
             const token = localStorage.getItem('token');
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+
             await axios.put(
                 `${API_URL}/api/teachers/${teacherId}`,
                 { isActive: !currentStatus },
                 { headers: { 'x-auth-token': token } }
             );
+
             fetchTeachers();
         } catch (error) {
-            console.error('Error updating teacher:', error);
+            console.error('Error updating teacher status:', error);
         }
     };
 
@@ -121,13 +121,13 @@ function AdminDashboard() {
         container: {
             padding: '20px',
             maxWidth: '1200px',
-            margin: '80px auto 0',
+            margin: '80px auto 0'
         },
         header: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '30px',
+            marginBottom: '30px'
         },
         addButton: {
             padding: '12px 24px',
@@ -135,36 +135,36 @@ function AdminDashboard() {
             color: '#fff',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer',
+            cursor: 'pointer'
         },
         formCard: {
             padding: '20px',
             marginBottom: '30px',
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            backgroundColor: '#fff',
+            backgroundColor: '#fff'
         },
         form: {
             display: 'flex',
             flexDirection: 'column',
-            gap: '15px',
+            gap: '15px'
         },
         input: {
             padding: '10px',
             fontSize: '1rem',
             border: '1px solid #ddd',
-            borderRadius: '4px',
+            borderRadius: '4px'
         },
         textarea: {
             padding: '10px',
             fontSize: '1rem',
             border: '1px solid #ddd',
             borderRadius: '4px',
-            minHeight: '80px',
+            minHeight: '80px'
         },
         buttonContainer: {
             display: 'flex',
-            gap: '10px',
+            gap: '10px'
         },
         submitButton: {
             padding: '10px 20px',
@@ -172,7 +172,7 @@ function AdminDashboard() {
             color: '#fff',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer',
+            cursor: 'pointer'
         },
         cancelButton: {
             padding: '10px 20px',
@@ -180,28 +180,28 @@ function AdminDashboard() {
             color: '#fff',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer',
+            cursor: 'pointer'
         },
         teacherCard: {
             padding: '20px',
             marginBottom: '15px',
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            backgroundColor: '#fff',
+            backgroundColor: '#fff'
         },
         teacherHeader: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '15px',
+            marginBottom: '15px'
         },
         teacherName: {
             fontSize: '1.3rem',
-            fontWeight: 'bold',
+            fontWeight: 'bold'
         },
         actionButtons: {
             display: 'flex',
-            gap: '10px',
+            gap: '10px'
         },
         deleteButton: {
             padding: '8px 16px',
@@ -209,7 +209,7 @@ function AdminDashboard() {
             color: '#fff',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer',
+            cursor: 'pointer'
         },
         toggleButton: {
             padding: '8px 16px',
@@ -217,30 +217,33 @@ function AdminDashboard() {
             color: '#000',
             border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer',
+            cursor: 'pointer'
         },
         statusBadge: {
             padding: '4px 12px',
             borderRadius: '12px',
             fontSize: '0.85rem',
             fontWeight: 'bold',
-            marginLeft: '10px',
+            marginLeft: '10px'
         },
         active: {
             backgroundColor: '#28a745',
-            color: '#fff',
+            color: '#fff'
         },
         inactive: {
             backgroundColor: '#dc3545',
-            color: '#fff',
-        },
+            color: '#fff'
+        }
     };
 
     return (
         <div style={styles.container}>
             <div style={styles.header}>
                 <h1>Admin Dashboard - Manage Teachers</h1>
-                <button style={styles.addButton} onClick={() => setShowAddForm(!showAddForm)}>
+                <button
+                    style={styles.addButton}
+                    onClick={() => setShowAddForm(!showAddForm)}
+                >
                     {showAddForm ? 'Cancel' : '+ Add New Teacher'}
                 </button>
             </div>
@@ -249,96 +252,37 @@ function AdminDashboard() {
                 <div style={styles.formCard}>
                     <h2>Add New Teacher</h2>
                     <form onSubmit={handleSubmit} style={styles.form}>
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Full Name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            style={styles.input}
-                            required
-                        />
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Email Address"
-                            value={formData.email}
-                            onChange={handleChange}
-                            style={styles.input}
-                            required
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            style={styles.input}
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="subject"
-                            placeholder="Subject (e.g., Mathematics, Physics)"
-                            value={formData.subject}
-                            onChange={handleChange}
-                            style={styles.input}
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="qualification"
-                            placeholder="Qualification (e.g., M.Sc, PhD)"
-                            value={formData.qualification}
-                            onChange={handleChange}
-                            style={styles.input}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="experience"
-                            placeholder="Years of Experience"
-                            value={formData.experience}
-                            onChange={handleChange}
-                            style={styles.input}
-                            required
-                        />
-                        <textarea
-                            name="bio"
-                            placeholder="Bio (Optional)"
-                            value={formData.bio}
-                            onChange={handleChange}
-                            style={styles.textarea}
-                        />
+                        <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} style={styles.input} required />
+                        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} style={styles.input} required />
+                        <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} style={styles.input} required />
+                        <input type="text" name="subject" placeholder="Subject" value={formData.subject} onChange={handleChange} style={styles.input} required />
+                        <input type="text" name="qualification" placeholder="Qualification" value={formData.qualification} onChange={handleChange} style={styles.input} required />
+                        <input type="number" name="experience" placeholder="Experience (years)" value={formData.experience} onChange={handleChange} style={styles.input} required />
+                        <textarea name="bio" placeholder="Bio" value={formData.bio} onChange={handleChange} style={styles.textarea} />
                         <div style={styles.buttonContainer}>
-                            <button type="submit" style={styles.submitButton}>
-                                Add Teacher
-                            </button>
-                            <button
-                                type="button"
-                                style={styles.cancelButton}
-                                onClick={() => setShowAddForm(false)}
-                            >
-                                Cancel
-                            </button>
+                            <button type="submit" style={styles.submitButton}>Add Teacher</button>
+                            <button type="button" style={styles.cancelButton} onClick={() => setShowAddForm(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
             )}
 
             <h2>All Teachers ({teachers.length})</h2>
+
             {teachers.length === 0 ? (
-                <p>No teachers found. Add your first teacher!</p>
+                <p>No teachers found.</p>
             ) : (
-                teachers.map(teacher => (
+                teachers.map((teacher) => (
                     <div key={teacher._id} style={styles.teacherCard}>
                         <div style={styles.teacherHeader}>
                             <div>
                                 <span style={styles.teacherName}>{teacher.userId.name}</span>
-                                <span style={{
-                                    ...styles.statusBadge,
-                                    ...(teacher.isActive ? styles.active : styles.inactive)
-                                }}>
+                                <span
+                                    style={{
+                                        ...styles.statusBadge,
+                                        ...(teacher.isActive ? styles.active : styles.inactive)
+                                    }}
+                                >
                                     {teacher.isActive ? 'Active' : 'Inactive'}
                                 </span>
                             </div>
@@ -357,13 +301,11 @@ function AdminDashboard() {
                                 </button>
                             </div>
                         </div>
-                        <div>
-                            <p><strong>Subject:</strong> {teacher.subject}</p>
-                            <p><strong>Qualification:</strong> {teacher.qualification}</p>
-                            <p><strong>Experience:</strong> {teacher.experience} years</p>
-                            <p><strong>Email:</strong> {teacher.userId.email}</p>
-                            {teacher.bio && <p><strong>Bio:</strong> {teacher.bio}</p>}
-                        </div>
+                        <p><strong>Subject:</strong> {teacher.subject}</p>
+                        <p><strong>Qualification:</strong> {teacher.qualification}</p>
+                        <p><strong>Experience:</strong> {teacher.experience} years</p>
+                        <p><strong>Email:</strong> {teacher.userId.email}</p>
+                        {teacher.bio && <p><strong>Bio:</strong> {teacher.bio}</p>}
                     </div>
                 ))
             )}
