@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function TeacherDashboard() {
     const [appointments, setAppointments] = useState([]);
     const [teacherId, setTeacherId] = useState(null);
     const [stats, setStats] = useState({ pending: 0, approved: 0, total: 0 });
+    const navigate = useNavigate();
 
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
@@ -97,6 +99,23 @@ function TeacherDashboard() {
             <p>Pending: {stats.pending}</p>
             <p>Approved: {stats.approved}</p>
             <p>Total: {stats.total}</p>
+
+            <div style={{ display: 'flex', gap: '15px', marginBottom: '30px' }}>
+                <button
+                    style={{
+                        padding: '12px 24px',
+                        backgroundColor: '#007bff',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                    }}
+                    onClick={() => navigate('/teacher/messages')}
+                >
+                    Messages
+                </button>
+            </div>
 
             <h2>Pending Requests</h2>
             {pendingAppointments.length === 0 ? (

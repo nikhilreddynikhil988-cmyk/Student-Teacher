@@ -145,12 +145,23 @@ function TeacherList() {
                             {teacher.bio && (
                                 <div style={styles.bio}>{teacher.bio}</div>
                             )}
-                            <button
-                                style={styles.button}
-                                onClick={() => navigate(`/student/book-appointment/${teacher._id}`)}
-                            >
-                                Book Appointment
-                            </button>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <button
+                                    style={{ ...styles.button, flex: 1 }}
+                                    onClick={() => navigate(`/student/book-appointment/${teacher._id}`)}
+                                >
+                                    Book Appointment
+                                </button>
+                                <button
+                                    style={{ ...styles.button, flex: 1, backgroundColor: '#6c757d' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/messages/${teacher.userId._id}`);
+                                    }}
+                                >
+                                    Message
+                                </button>
+                            </div>
                         </div>
                     ))
                 )}
